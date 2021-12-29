@@ -2,3 +2,16 @@
   padding: 0;
   margin: 0;
 }
+#app {
+  height: 100vh;
+  overflow-y: auto;
+}
+.el-icon {
+  font-size: var(--font-size) !important;
+}
+.hover {
+  cursor: pointer;
+}
+:root {
+  --el-color-primary: #21252a !important;
+}

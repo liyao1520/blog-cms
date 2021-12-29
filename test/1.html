@@ -1,0 +1,45 @@
+<script src="https://cdn.jsdelivr.net/gh/drew233/cdn/js/jquery-3.3.1.min.js"></script>
+<script>
+document.addEventListener('paste', function (event) {
+    var items = event.clipboardData && event.clipboardData.items;
+    var file = null;
+    if (items && items.length) {
+        // 检索剪切板items
+        for (var i = 0; i < items.length; i++) {
+            if (items[i].type.indexOf('image') !== -1) {
+                file = items[i].getAsFile();
+                break;
+            }
+        }
+    }
+    // console.log(file); file即为剪切板中的图片
+    // 通过api接口上传到sm.ms
+    var formData = new FormData();
+    formData.append('smfile',file);
+    $.ajax({
+      url: 'https://sm.ms/api/v2/upload',
+      type: 'POST',
+      data:formData,
+      format: 'json',
+      success: function(smms){
+        var mid=eval('('+smms+')');
+        console.log(mid);
+        if(mid.code=="image_repeated"){
+          alert(mid.images);
+        }else if(mid.code=="flood"){
+          alert("上传过于频繁，等会再试试吧~");
+        }
+        else{
+          alert(mid.data.url);
+        }
+      },
+      error: function(smms){
+        var mid=eval('('+smms+')');
+        console.log(mid.data.url);
+      },
+      cache: false,
+      contentType: false,
+      processData: false
+  });
+});
+</script>

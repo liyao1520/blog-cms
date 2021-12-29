@@ -33,7 +33,7 @@ class Request {
       this.interceptors?.responseInterceptorCatch
     )
   }
-  //request 请求方法
+  // request 请求方法
   // request(config: RequestConfig): Promise<AxiosResponse<any>> {
   //   return this.instrance.request(config)
   // }

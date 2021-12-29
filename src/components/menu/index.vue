@@ -1,20 +1,26 @@
 <template>
   <div class="nav-menu">
     <div class="logo">
-      <img src="~@/assets/logo.png" alt="" /><span>博客管理系统</span>
+      <img src="~@/assets/logo.png" alt="" /><span v-if="!isFold"
+        >博客管理系统</span
+      >
     </div>
     <el-menu
       router
       background-color="#0c2039"
       text-color="rgb(231, 229, 229)"
       active-text-color="#409EFF"
+      :collapse="isFold"
     >
       <template v-for="item in navMenuConfig" :key="item.name">
         <el-menu-item v-if="item.path" :index="item.path">
-          {{ item.name }}
+          <el-icon><setting /></el-icon> <span>{{ item.name }}</span>
         </el-menu-item>
         <el-sub-menu :index="item.name" v-else>
-          <template #title>{{ item.name }}</template>
+          <template #title
+            ><el-icon><setting /></el-icon
+            ><span>{{ item.name }}</span></template
+          >
           <el-menu-item v-for="i in item.items" :key="i.name" :index="i.path">
             <el-icon :size="12" color="#fff"><Menu /></el-icon> {{ i.name }}
           </el-menu-item>
@@ -25,8 +31,12 @@
 </template>
 
 <script setup lang="ts">
+import { defineProps, withDefaults } from 'vue'
 import navMenuConfig from './navMenuConfig'
-import { Menu } from '@element-plus/icons-vue'
+import { Menu, Setting } from '@element-plus/icons-vue'
+withDefaults(defineProps<{ isFold: boolean }>(), {
+  isFold: false
+})
 </script>
 
 <style lang="less" scoped>
