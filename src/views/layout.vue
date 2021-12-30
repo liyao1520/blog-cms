@@ -9,6 +9,10 @@
           <el-icon v-if="isFold" :size="30"><fold /></el-icon>
           <el-icon v-else :size="30"><expand /></el-icon>
         </div>
+        <el-breadcrumb separator="/" style="margin-left: 20px">
+          <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+          <el-breadcrumb-item>{{ title }}</el-breadcrumb-item>
+        </el-breadcrumb>
         <el-dropdown class="my-dropdown">
           <span class="el-dropdown-link">
             <el-avatar :icon="UserFilled" :size="40"></el-avatar>
@@ -45,11 +49,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import myMenu from '@/components/menu/index.vue'
 import { UserFilled, ArrowDown, Expand, Fold } from '@element-plus/icons-vue'
 import { removeItem } from '@/utils/storage'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { reqUpdatePassword } from '@/service/user'
 const router = useRouter()
@@ -73,6 +77,9 @@ const hanbleSumit = async () => {
     ElMessage.success('修改密码成功!')
   }
 }
+//获取useRoute的mate中title信息
+const route = useRoute()
+const title = computed(() => route.meta.title)
 </script>
 
 <style scoped lang="less">

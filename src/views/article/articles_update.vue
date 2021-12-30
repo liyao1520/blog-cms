@@ -75,6 +75,8 @@ const formData = reactive({
 })
 // 调接口获取信息
 const id = useRoute().params.id
+console.log(useRoute())
+
 const getArticleInfo = () => {
   reqArticleById(id as string).then((res) => {
     // formData
@@ -108,7 +110,6 @@ const submit = () => {
     type: 'warning'
   }).then(async () => {
     const res = await reqUpdateArticle(formData)
-    console.log(formData)
     if (res.code === 0) {
       ElMessage.success('修改成功')
     }

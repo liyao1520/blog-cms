@@ -6,32 +6,57 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('@/views/layout.vue'),
     children: [
       {
+        path: '',
+        component: () => import('@/views/index.vue')
+      },
+      {
         path: 'users',
-        component: () => import('@/views/user/index.vue')
+        component: () => import('@/views/user/index.vue'),
+        meta: {
+          title: '用户管理'
+        }
       },
       {
         path: 'comments',
-        component: () => import('@/views/comment/index.vue')
+        component: () => import('@/views/comment/index.vue'),
+        meta: {
+          title: '评论管理'
+        }
       },
       {
         path: 'tags',
-        component: () => import('@/views/tag/index.vue')
+        component: () => import('@/views/tag/index.vue'),
+        meta: {
+          title: '标签管理'
+        }
       },
       {
         path: 'classifies',
-        component: () => import('@/views/classify/index.vue')
+        component: () => import('@/views/classify/index.vue'),
+        meta: {
+          title: '分类管理'
+        }
       },
       {
         path: 'articles_add',
-        component: () => import('@/views/article/articles_add.vue')
+        component: () => import('@/views/article/articles_add.vue'),
+        meta: {
+          title: '新增文章'
+        }
       },
       {
         path: 'articles_update/:id',
-        component: () => import('@/views/article/articles_update.vue')
+        component: () => import('@/views/article/articles_update.vue'),
+        meta: {
+          title: '更新文章'
+        }
       },
       {
         path: 'articles',
-        component: () => import('@/views/article/index.vue')
+        component: () => import('@/views/article/index.vue'),
+        meta: {
+          title: '文章管理'
+        }
       }
     ]
   },
