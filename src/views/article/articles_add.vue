@@ -53,18 +53,57 @@
           ></el-pagination>
         </el-tab-pane>
       </el-tabs>
-
+      <el-row>
+        <el-col :span="10">
+          <h5 style="height: 28px">分类</h5>
+          <el-select size="mini" v-model="formData.classify" filterable>
+            <el-option
+              v-for="item in classifyOptions"
+              :key="item.id"
+              :value="item.id"
+              :label="item.name"
+            />
+          </el-select>
+        </el-col>
+        <el-col :span="14">
+          <h5 style="height: 28px">
+            标签
+            <el-button
+              type="primary"
+              size="mini"
+              :icon="Plus"
+              circle
+              style="margin-left: 180px"
+              @click="addTagHandle"
+            ></el-button>
+          </h5>
+          <el-select
+            style="width: 250px"
+            size="mini"
+            v-model="formData.tags"
+            filterable
+            multiple
+            allow-create
+          >
+            <el-option
+              v-for="item in TagOptions"
+              :key="item.id"
+              :value="item.id"
+              :label="item.name"
+          /></el-select>
+        </el-col>
+      </el-row>
+    </el-col>
+    <el-col :span="8">
+      <div class="img-wrap">
+        <img :src="formData.cover.trim()" alt="" />
+      </div>
       <h5>开启评论</h5>
       <el-switch
         v-model="formData.canComment"
         :active-value="1"
         :inactive-value="0"
       />
-    </el-col>
-    <el-col :span="8">
-      <div class="img-wrap">
-        <img :src="formData.cover.trim()" alt="" />
-      </div>
     </el-col>
     <el-col :span="6">
       <el-button type="primary" class="my-button" @click="submit"
@@ -81,18 +120,35 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
+import { onMounted, reactive, ref } from 'vue'
 //markdown
 import MdEditor from 'md-editor-v3'
 import 'md-editor-v3/lib/style.css'
 import { ElMessage, ElMessageBox } from 'element-plus'
+import { Plus } from '@element-plus/icons-vue'
 import { reqAddArticle } from '@/service/article'
 import { reqUploadImgHistory } from '@/service/upload'
-const formData = reactive({
+import { reqAddTag, reqTagList } from '@/service/tag'
+import { reqClassifyList } from '@/service/classify'
+interface ITagItem {
+  id: number
+  name: string
+}
+interface IFormData {
+  content: string
+  title: string
+  cover: string
+  canComment: 1 | 0
+  tags: ITagItem[]
+  classify: number | ''
+}
+const formData = reactive<IFormData>({
   content: '',
   title: '',
   cover: '',
-  canComment: 1
+  canComment: 1,
+  tags: [],
+  classify: ''
 })
 let content = localStorage.getItem('mdHistory')
 
@@ -110,6 +166,9 @@ const htmlChange = (_html: string) => {
 
 //发布
 const submit = () => {
+  if (formData.classify === '') {
+    return ElMessage.warning('请选择分类')
+  }
   ElMessageBox.confirm('确定要发布?', 'Warning', {
     confirmButtonText: '确认',
     cancelButtonText: '取消',
@@ -168,6 +227,31 @@ const pageChangeHandle = async (page: any) => {
 }
 const imgClickHandle = (url: string) => {
   formData.cover = url
+}
+//分类和标签逻辑
+interface IClassifyItem {
+  name: string
+  id: number
+}
+const TagOptions = ref<ITagItem[]>([])
+const classifyOptions = ref<IClassifyItem[]>([])
+onMounted(async () => {
+  const { result: tagData } = await reqTagList({ pageFlag: 0 })
+  const { result: classifyData } = await reqClassifyList({ pageFlag: 0 })
+  TagOptions.value = tagData
+  classifyOptions.value = classifyData
+})
+const addTagHandle = () => {
+  ElMessageBox.prompt('输入新增标签名', '新增Tag').then(async ({ value }) => {
+    const res = await reqAddTag({
+      name: value.trim()
+    })
+    if (res.code === 0) {
+      ElMessage.success(`新增标签 '${value.trim()}' 成功~`)
+      const { result } = await reqTagList({ pageFlag: 0 })
+      TagOptions.value = result
+    }
+  })
 }
 </script>
 
