@@ -1,7 +1,8 @@
 import Request from './request'
 
-import { getItem } from '@/utils/storage'
+import { getItem, removeItem } from '@/utils/storage'
 import { ElMessage } from 'element-plus'
+import router from '@/router'
 export const request = new Request({
   baseURL: '/api',
   timeout: 5000,
@@ -22,6 +23,11 @@ export const request = new Request({
         ElMessage.error(res.status + '--' + res.statusText)
       } else if (res.data.code !== 0) {
         ElMessage.error(res.data.msg)
+        if (res.data.code == -2) {
+          removeItem('token')
+          removeItem('userInfo')
+          router.replace('/login')
+        }
       }
       return res.data
     },

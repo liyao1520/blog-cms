@@ -76,13 +76,12 @@ export default defineComponent({
           const res = await reqLogin(loginModel)
           if (res.code === 0) {
             ElMessage.success('登录成功!')
+            const { token } = res.result
+            const userInfo = res.result.userInfo
+            store.commit('loginModule/setToken', token)
+            store.commit('loginModule/setUserInfo', userInfo)
             router.replace('/')
           }
-          const { token } = res.result
-          const userInfo = res.result.userInfo
-          store.commit('loginModule/setToken', token)
-          store.commit('loginModule/setUserInfo', userInfo)
-          router.replace('/')
         }
         return false
       })
