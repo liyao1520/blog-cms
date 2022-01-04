@@ -32,5 +32,9 @@ export default [
   {
     name: '博客标签管理',
     path: '/tags'
+  },
+  {
+    name: 'Markdown管理',
+    path: '/md'
   }
 ]

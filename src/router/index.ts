@@ -57,6 +57,13 @@ const routes: Array<RouteRecordRaw> = [
         meta: {
           title: '文章管理'
         }
+      },
+      {
+        path: 'md',
+        component: () => import('@/views/my_md/index.vue'),
+        meta: {
+          title: 'Markdowm管理'
+        }
       }
     ]
   },
