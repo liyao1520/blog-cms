@@ -137,6 +137,7 @@ import { reqAddTag, reqTagList } from '@/service/tag'
 import { reqClassifyList } from '@/service/classify'
 import { reqUploadImgHistory } from '@/service/upload'
 import { Plus } from '@element-plus/icons-vue'
+import markdownImageAddSize from '@/tools/markdownImageAddSize'
 interface ITagItem {
   id: number
   name: string
@@ -190,7 +191,12 @@ const htmlChange = () => {
 }
 
 //修改
-const submit = () => {
+const submit = async () => {
+  // 提交前先 把markdown中的图片的大小信息给到title中,用于懒加载
+
+  const formatMarkdown = await markdownImageAddSize(formData.content)
+  formData.content = formatMarkdown
+
   ElMessageBox.confirm(`确定要修改id为${formData.id}的文章?`, 'Warning', {
     confirmButtonText: '确认',
     cancelButtonText: '取消',

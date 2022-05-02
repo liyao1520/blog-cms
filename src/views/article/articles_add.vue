@@ -130,6 +130,7 @@ import { reqAddArticle } from '@/service/article'
 import { reqUploadImgHistory } from '@/service/upload'
 import { reqAddTag, reqTagList } from '@/service/tag'
 import { reqClassifyList } from '@/service/classify'
+import markdownImageAddSize from '@/tools/markdownImageAddSize'
 interface ITagItem {
   id: number
   name: string
@@ -165,7 +166,12 @@ const htmlChange = (_html: string) => {
 }
 
 //发布
-const submit = () => {
+const submit = async () => {
+  // 提交前先 把markdown中的图片的大小信息给到title中,用于懒加载
+
+  const formatMarkdown = await markdownImageAddSize(formData.content)
+  formData.content = formatMarkdown
+
   if (formData.classify === '') {
     return ElMessage.warning('请选择分类')
   }

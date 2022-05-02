@@ -37,11 +37,7 @@
 
 <script setup lang="ts">
 import MyTable from '@/components/base-ui/table/index.vue'
-import {
-  reqArticleList,
-  reqDelArticle,
-  reqUpdateArticle
-} from '@/service/article'
+import { reqArticleList, reqDelArticle } from '@/service/article'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
